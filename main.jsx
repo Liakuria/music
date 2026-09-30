@@ -1,0 +1,8 @@
+import React from 'react'; import {createRoot} from 'react-dom/client'; import './style.css';
+const repo = import.meta.env.VITE_GITHUB_REPO || '';
+const branch = import.meta.env.VITE_GITHUB_BRANCH || 'main';
+const uploadUrl = repo ? `https://github.com/${repo}/upload/${branch}/input` : 'https://github.com/';
+const actionsUrl = repo ? `https://github.com/${repo}/actions/workflows/process.yml` : 'https://github.com/';
+const outputBase = repo ? `https://github.com/${repo}/raw/${branch}/output` : '';
+function App(){return <main><section className="hero"><div className="badge">V8 • GitHub + Vercel</div><h1>🎵 Music → Piano</h1><p>Vercelを画面、GitHub Actionsを解析エンジンとして使う構成です。Renderは不要です。</p></section><section className="card"><h2>① 動画・音声をGitHubへ</h2><p>下のボタンから <code>input/</code> フォルダへMP4 / MOV / MP3 / WAVなどをアップロードしてCommitします。</p><a className="button" href={uploadUrl} target="_blank">GitHubにファイルを追加 ↗</a></section><section className="card"><h2>② 解析を確認</h2><p>Commit後、GitHub Actionsが自動でFFmpeg → Demucs → Basic Pitch → MIDI → MusicXML → PDFを実行します。</p><a className="button secondary" href={actionsUrl} target="_blank">Actionsを開く ↗</a></section><section className="card"><h2>③ 結果</h2><div className="grid">{['MIDI','MusicXML','PDF','JSON'].map(x=><a className="result" key={x} href={outputBase ? `${outputBase}/latest.${x==='MusicXML'?'musicxml':x.toLowerCase()}` : '#'} target="_blank"><b>{x}</b><span>GitHubのoutput/</span></a>)}</div><p className="note">結果ファイル名は元の曲名になります。必要ならGitHubの <code>output/</code> フォルダから直接取得できます。</p></section><section className="card"><h2>🎹 変換内容</h2><div className="flow">🎬 画録 → 🎵 音声抽出 → 🎚️ 音源分離 → 🎼 採譜 → 🎹 ピアノ化 → 🎵 MIDI → 📄 PDF</div></section></main>}
+createRoot(document.getElementById('root')).render(<App/>);
