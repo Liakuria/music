@@ -61,7 +61,7 @@ jobs:
         env:
           INPUT_FILE: ${{ steps.input.outputs.file }}
         run: |
-          python tools/process.py "$INPUT_FILE"
+          python process.py "$INPUT_FILE"
 
       - name: Show generated files
         run: |
